@@ -231,7 +231,7 @@ export default async function DashboardPage() {
             <MenuRow
               href="/productos"
               icon={Package}
-              tone="cyan"
+              tone="slate"
               title="Productos"
               desc="Precios, costos y stock"
             />
