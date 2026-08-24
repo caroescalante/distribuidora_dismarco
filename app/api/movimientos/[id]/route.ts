@@ -643,7 +643,7 @@ export async function PATCH(
             }
           }
 
-          const viejo =
+                  const viejo =
             calcularContribucionMovimiento(
               movimientoActual.tipo_movimiento as
                 | "ingreso"
@@ -663,6 +663,10 @@ export async function PATCH(
               Number(
                 movimientoActual.monto_perdida_generada ??
                   0
+              ),
+
+              Number(
+                movimientoActual.monto_total
               )
             );
 
@@ -678,7 +682,9 @@ export async function PATCH(
 
               ganancia,
 
-              perdida
+              perdida,
+
+              monto_total
             );
 
           const deltaMontoTotal =
@@ -711,6 +717,12 @@ export async function PATCH(
                 viejo.deltaMontoPerdida
             );
 
+          const deltaMontoMovimiento =
+            round2(
+              nuevo.deltaMontoMovimiento -
+                viejo.deltaMontoMovimiento
+            );
+
           if (
             deltaMontoTotal !==
               0 ||
@@ -721,6 +733,8 @@ export async function PATCH(
             deltaMontoGanancia !==
               0 ||
             deltaMontoPerdida !==
+              0 ||
+            deltaMontoMovimiento !==
               0
           ) {
             const cajaActual =
@@ -774,6 +788,15 @@ export async function PATCH(
                         0
                     ) +
                       deltaMontoPerdida
+                  ),
+
+                monto_movimiento:
+                  round2(
+                    Number(
+                      cajaActual?.monto_movimiento ??
+                        0
+                    ) +
+                      deltaMontoMovimiento
                   ),
 
                 tipo_impacto:
@@ -896,6 +919,10 @@ export async function DELETE(
             Number(
               movimiento.monto_perdida_generada ??
                 0
+            ),
+
+            Number(
+              movimiento.monto_total
             )
           );
 
