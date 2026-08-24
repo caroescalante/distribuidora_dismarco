@@ -39,11 +39,11 @@ export default async function DashboardPage() {
     where: { estado: "no_pago" },
   });
 
-  const monto_total = caja?.monto_total ?? 0;
-  const montoPerdida = caja?.monto_perdida ?? 0;
-  const montoGanancia = caja?.monto_ganancia ?? 0;
-  const montoPendientePago = caja?.monto_pendiente_pago ?? 0;
-  const montoDeuda = caja?.monto_deuda ?? 0;
+  const monto_total = Number(caja?.monto_total ?? 0);
+  const montoPerdida = Number(caja?.monto_perdida ?? 0);
+  const montoGanancia = Number(caja?.monto_ganancia ?? 0);
+  const montoPendientePago = Number(caja?.monto_pendiente_pago ?? 0);
+  const montoDeuda = Number(caja?.monto_deuda ?? 0);
 
   const cajaNegativa = monto_total < 0;
 
