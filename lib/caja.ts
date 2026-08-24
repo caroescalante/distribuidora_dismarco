@@ -37,6 +37,7 @@ export async function registrarImpactoCaja(
     monto_ganancia?: number;
     monto_perdida?: number;
     monto_deuda?: number;
+    monto_destinado_deuda?: number;
     monto_inversion?: number;
     monto_movimiento?: number;
     tipo_impacto?: TipoImpactoCaja;
@@ -56,7 +57,7 @@ export async function registrarImpactoCaja(
       monto_ganancia: cambios.monto_ganancia ?? Number(cajaActual?.monto_ganancia ?? 0),
       monto_perdida: cambios.monto_perdida ?? Number(cajaActual?.monto_perdida ?? 0),
       monto_deuda: cambios.monto_deuda ?? Number(cajaActual?.monto_deuda ?? 0),
-      monto_destinado_deuda: Number(cajaActual?.monto_destinado_deuda ?? 0),
+      monto_destinado_deuda: cambios.monto_destinado_deuda ?? Number(cajaActual?.monto_destinado_deuda ?? 0),
       monto_inversion: cambios.monto_inversion ?? Number(cajaActual?.monto_inversion ?? 0),
       tipo_impacto: cambios.tipo_impacto ?? "movimiento_externo",
       referencia_id: cambios.referencia_id ?? null,
