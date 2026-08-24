@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
       data: { intentos_fallidos: 0, bloqueado_hasta: null, ultimo_acceso: new Date() },
     });
 
-    const token = await crearSessionToken({ sub: user.id, usuario: user.usuario });
+    const token = await crearSessionToken({ sub: String(user.id), usuario: user.usuario });
 
     const res = NextResponse.json({ ok: true });
     res.cookies.set(SESSION_COOKIE_NAME, token, {

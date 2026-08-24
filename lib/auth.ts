@@ -37,7 +37,7 @@ export async function crearSessionToken(payload: SessionPayload) {
 export async function verifySessionToken(token: string): Promise<SessionPayload | null> {
   try {
     const { payload } = await jwtVerify(token, SECRET);
-    if (typeof payload.sub !== "number" || typeof payload.usuario !== "string") {
+    if (typeof payload.sub !== "string" || typeof payload.usuario !== "string") {
       return null;
     }
     return { sub: payload.sub, usuario: payload.usuario };
