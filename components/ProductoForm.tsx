@@ -14,6 +14,7 @@ import {
   Sparkles,
   Check,
   Loader2,
+  LucideIcon
 } from "lucide-react";
 
 function formatearMoneda(valor: number) {
@@ -49,7 +50,7 @@ function FieldLabel({
   icon: Icon,
   children,
 }: {
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   children: React.ReactNode;
 }) {
   return (

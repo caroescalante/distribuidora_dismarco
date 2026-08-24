@@ -19,6 +19,7 @@ import {
   Users,
   TrendingUp,
   TrendingDown,
+  LucideIcon,
 } from "lucide-react";
 
 // ---------- Helpers ----------
@@ -102,7 +103,7 @@ function FieldLabel({
   icon: Icon,
   children,
 }: {
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   children: React.ReactNode;
 }) {
   return (
@@ -801,7 +802,7 @@ export function MovimientoForm({ movimiento }: Props) {
             </div>
           </Card>
 
-          {/* Estado: solo egreso */}
+       {/* Estado: solo egreso */}
           {esEgreso && (
             <Card title="Estado">
               <div className="grid grid-cols-2 gap-3">
@@ -809,7 +810,7 @@ export function MovimientoForm({ movimiento }: Props) {
                   <FieldLabel icon={Receipt}>Factura</FieldLabel>
                   <select
                     value={factura}
-                    onChange={(e) => setFactura(e.target.value)}
+                    onChange={(e) => setFactura(e.target.value as "si" | "no")}
                     className={`${inputBase} appearance-none`}
                   >
                     <option value="si">Sí</option>
@@ -821,7 +822,7 @@ export function MovimientoForm({ movimiento }: Props) {
                   <FieldLabel icon={Truck}>Entregado</FieldLabel>
                   <select
                     value={entregado}
-                    onChange={(e) => setEntregado(e.target.value)}
+                    onChange={(e) => setEntregado(e.target.value as "si" | "no")}
                     className={`${inputBase} appearance-none`}
                   >
                     <option value="si">Sí</option>

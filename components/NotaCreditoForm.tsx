@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Calendar, Users, FileText, Wallet, Check, Loader2 } from "lucide-react";
+import { ArrowLeft, Calendar, Users, FileText, Wallet, Check, Loader2, LucideIcon } from "lucide-react";
 
 function formatearMoneda(valor: number) {
   return new Intl.NumberFormat("es-AR", {
@@ -27,7 +27,7 @@ function FieldLabel({
   icon: Icon,
   children,
 }: {
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   children: React.ReactNode;
 }) {
   return (
