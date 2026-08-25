@@ -7,6 +7,7 @@ export type TipoImpactoCaja =
   | "perdida"
   | "inversion"
   | "deuda"
+  | "correccion"
   | "movimiento_externo"
   | "creditos_clientes";
 

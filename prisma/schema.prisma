@@ -139,6 +139,7 @@ enum tipo_impacto_caja_enum {
   prestamo
   movimiento_externo
   creditos_clientes
+  correccion
 }
 
 enum tipo_movimiento_enum {

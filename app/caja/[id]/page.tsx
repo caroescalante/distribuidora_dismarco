@@ -10,6 +10,7 @@ const ETIQUETAS_TIPO: Record<string, string> = {
   perdida: "Pérdida",
   inversion: "Inversión",
   deuda: "Pago deuda",
+  correccion: "Corrección",
   movimiento_externo: "Movimiento externo",
   creditos_clientes: "Nota de crédito",
 };
@@ -83,7 +84,8 @@ export default async function DetalleCajaPage({
   const esGanancia = registro.tipo_impacto === "ganancia";
   const esPerdida = registro.tipo_impacto === "perdida";
   const esDeuda = registro.tipo_impacto === "deuda";
-  const esOtro = !esGanancia && !esPerdida && !esDeuda;
+  const esCorreccion = registro.tipo_impacto === "correccion";
+  const esOtro = !esGanancia && !esPerdida && !esDeuda && !esCorreccion;
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -171,6 +173,27 @@ export default async function DetalleCajaPage({
                 label="Pendiente de pago (NC)"
                 valor={formatearMoneda(Number(registro.monto_pendiente_pago))}
               />
+            )}
+
+            {esCorreccion && (
+              <>
+                <Campo
+                  label="Ganancia acumulada"
+                  valor={formatearMoneda(Number(registro.monto_ganancia))}
+                />
+                <Campo
+                  label="Pérdida acumulada"
+                  valor={formatearMoneda(Number(registro.monto_perdida))}
+                />
+                <Campo
+                  label="Deuda pendiente"
+                  valor={formatearMoneda(Number(registro.monto_deuda))}
+                />
+                <Campo
+                  label="Inversión acumulada"
+                  valor={formatearMoneda(Number(registro.monto_inversion))}
+                />
+              </>
             )}
           </div>
 

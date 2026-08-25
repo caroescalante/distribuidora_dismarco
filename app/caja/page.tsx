@@ -4,6 +4,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Plus,
+  Pencil,
+  Briefcase,
   TrendingUp,
   TrendingDown,
   Landmark,
@@ -19,25 +21,18 @@ const PAGE_SIZE = 25;
 const ZONA_HORARIA =
   "America/Argentina/Buenos_Aires";
 
-const ETIQUETAS_TIPO: Record<
-  string,
-  string
-> = {
+const ETIQUETAS_TIPO: Record<string, string> = {
   ganancia: "Ganancia",
   perdida: "Pérdida",
   inversion: "Inversión",
   deuda: "Pago deuda",
-  movimiento_externo:
-    "Movimiento externo",
-  creditos_clientes:
-    "Nota de crédito",
+  correccion: "Corrección",
+  movimiento_externo: "Movimiento externo",
+  creditos_clientes: "Nota de crédito",
 };
 
-const TIPOS_BORRABLES = [
-  "ganancia",
-  "perdida",
-  "deuda",
-];
+const TIPOS_BORRABLES = ["ganancia", "perdida", "deuda", "correccion"];
+
 
 function formatearMoneda(
   valor: number
@@ -314,6 +309,20 @@ export default async function CajaPage({
               Caja
             </h1>
           </div>
+        </div>
+
+        {/* ------------------------------------------------ */}
+        {/* EDITAR CAJA */}
+        {/* ------------------------------------------------ */}
+
+        <div className="px-4 sm:px-6 lg:px-0 mt-3 flex justify-end">
+          <Link
+            href="/caja/editar"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 bg-white border border-slate-200 rounded-full px-3 py-1.5 shadow-sm hover:bg-slate-50 transition-colors"
+          >
+            <Pencil size={13} />
+            Editar caja
+          </Link>
         </div>
 
         {/* ------------------------------------------------ */}
