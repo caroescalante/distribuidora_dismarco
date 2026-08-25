@@ -3,6 +3,7 @@ import { ArrowLeft, ChevronLeft, ChevronRight, Plus, Package } from "lucide-reac
 import { prisma } from "@/lib/prisma";
 import { EliminarProductoButton } from "@/components/EliminarProductoButton";
 import { ToggleHabilitadoProductoButton } from "@/components/ToggleHabilitadoProductoButton";
+import { Prisma } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
 
@@ -25,14 +26,22 @@ export default async function ProductosPage({
   const page = Math.max(parseInt(searchParams.page ?? "1", 10) || 1, 1);
   const skip = (page - 1) * PAGE_SIZE;
 
-  const [productos, total] = await Promise.all([
+  const [productos, total, subtotalResult] = await Promise.all([
     prisma.productos.findMany({
       orderBy: { descripcion: "asc" },
       skip,
       take: PAGE_SIZE,
     }),
     prisma.productos.count(),
+    prisma.$queryRaw<{ subtotal: string | null }[]>(
+      Prisma.sql`
+        SELECT SUM(precio * COALESCE(stock_disponible, 0))::numeric AS subtotal
+        FROM productos
+      `
+    ),
   ]);
+
+const subtotalMercaderia = Number(subtotalResult[0]?.subtotal ?? 0);
 
   const totalPages = Math.max(Math.ceil(total / PAGE_SIZE), 1);
 
@@ -50,8 +59,12 @@ export default async function ProductosPage({
           <div>
             <p className="text-xs text-slate-500">{total} productos</p>
             <h1 className="text-lg font-bold text-slate-900">Productos</h1>
+            <p className="text-xs font-mono font-semibold text-emerald-700 mt-0.5">
+              {formatearMoneda(subtotalMercaderia)} en mercadería
+            </p>
           </div>
         </div>
+ 
 
         {/* Grilla */}
         <div className="px-4 sm:px-6 lg:px-0 mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
