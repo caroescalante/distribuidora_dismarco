@@ -467,24 +467,19 @@ export async function POST(req: NextRequest) {
         );
 
         // -----------------------------------------------------
-        // STOCK Y COSTO
+        // STOCK
         // -----------------------------------------------------
+        // Nota: precio_costo ya NO se calcula ni se actualiza
+        // acá. Es un campo que ahora carga el usuario
+        // manualmente en la ficha del producto.
 
         if (tipo_movimiento === "ingreso") {
           for (const p of productos) {
-            const precioCatalogo =
-              precioPorId.get(
-                p.producto_id
-              )!;
-
             await tx.productos.update({
               where: {
                 id: p.producto_id,
               },
               data: {
-                precio_costo: round2(
-                  precioCatalogo * factor
-                ),
                 stock_disponible: {
                   increment: p.cantidad,
                 },

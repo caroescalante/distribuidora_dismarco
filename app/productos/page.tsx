@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { EliminarProductoButton } from "@/components/EliminarProductoButton";
 import { ToggleHabilitadoProductoButton } from "@/components/ToggleHabilitadoProductoButton";
 import { Prisma } from "@prisma/client";
+import { BuscadorProductos } from "@/components/BuscadorProductos";
 
 export const dynamic = "force-dynamic";
 
@@ -64,7 +65,11 @@ const subtotalMercaderia = Number(subtotalResult[0]?.subtotal ?? 0);
             </p>
           </div>
         </div>
- 
+
+         {/* Buscador */}
+        <div className="px-4 sm:px-6 lg:px-0 mt-4">
+          <BuscadorProductos />
+        </div>
 
         {/* Grilla */}
         <div className="px-4 sm:px-6 lg:px-0 mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">

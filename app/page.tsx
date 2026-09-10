@@ -139,14 +139,14 @@ export default async function DashboardPage() {
           {/* Stats grid */}
           <div className="mt-4 lg:mt-0 lg:col-span-3 grid grid-cols-2 gap-3 sm:gap-4">
             <StatCard
-              icon={TrendingUp}
+              icon={TrendingDown}
               label="Pérdida"
               value={formatMonto(montoPerdida)}
               tone="teal"
             />
 
             <StatCard
-              icon={TrendingDown}
+              icon={TrendingUp}
               label="Ganancia"
               value={formatMonto(montoGanancia)}
               tone="emerald"
