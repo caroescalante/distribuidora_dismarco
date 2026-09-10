@@ -14,6 +14,8 @@ import {
   Sparkles,
   Check,
   Loader2,
+  Minus,
+  Plus,
   LucideIcon
 } from "lucide-react";
 
@@ -31,6 +33,17 @@ function digitsToNumber(digits: string) {
 }
 function numberToDigits(n: number) {
   return String(Math.round(n * 100));
+}
+
+// Redondea al medio más cercano: 1.4 -> 1.5, 1.2 -> 1, 1.6 -> 1.5, etc.
+function roundToHalf(n: number) {
+  if (!Number.isFinite(n)) return 0;
+  return Math.round(n * 2) / 2;
+}
+
+function formatearStock(n: number) {
+  // Muestra "1" en vez de "1.0" y "1.5" cuando corresponde
+  return Number.isInteger(n) ? String(n) : n.toFixed(1);
 }
 
 function formatearFechaHora(iso: string) {
@@ -102,7 +115,7 @@ export function ProductoForm({ producto }: Props) {
   );
   const [nota, setNota] = useState(producto?.nota ?? "");
   const [stockDisponible, setStockDisponible] = useState(
-    producto?.stockDisponible != null ? String(producto.stockDisponible) : "0"
+    producto?.stockDisponible != null ? formatearStock(producto.stockDisponible) : "0"
   );
   const [proveedor, setProveedor] = useState(producto?.proveedor ?? "");
   const [habilitado, setHabilitado] = useState<"si" | "no">(producto?.habilitado ?? "si");
@@ -115,12 +128,31 @@ export function ProductoForm({ producto }: Props) {
 
   const isValid = descripcion.trim() !== "" && precioDigits !== "" && precio > 0;
 
+  function ajustarStock(delta: number) {
+    setStockDisponible((prev) => {
+      const actual = roundToHalf(parseFloat(prev || "0"));
+      const siguiente = Math.max(0, actual + delta);
+      return formatearStock(siguiente);
+    });
+  }
+
+  function normalizarStock() {
+    setStockDisponible((prev) => {
+      const n = roundToHalf(Math.max(0, parseFloat(prev || "0")));
+      return formatearStock(n);
+    });
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!isValid || submitting) return;
 
     setSubmitting(true);
     setError(null);
+
+    // Nos aseguramos de mandar siempre un múltiplo de 0.5, sin importar
+    // si el usuario llegó a disparar el blur del input o no.
+    const stockFinal = roundToHalf(Math.max(0, parseFloat(stockDisponible || "0")));
 
     try {
       const url = esEdicion ? `/api/productos/${producto!.id}` : "/api/productos";
@@ -134,7 +166,7 @@ export function ProductoForm({ producto }: Props) {
           precio,
           precio_costo: precioCosto,
           nota: nota.trim() ? nota.trim() : null,
-          stock_disponible: parseInt(stockDisponible || "0", 10),
+          stock_disponible: stockFinal,
           proveedor: proveedor.trim() ? proveedor.trim() : null,
           habilitado,
         }),
@@ -246,14 +278,43 @@ export function ProductoForm({ producto }: Props) {
                 </div>
                 <div>
                   <FieldLabel icon={Boxes}>Stock disponible</FieldLabel>
-                  <input
-                    type="number"
-                    inputMode="numeric"
-                    value={stockDisponible}
-                    onChange={(e) => setStockDisponible(e.target.value.replace(/[^\d]/g, ""))}
-                    placeholder="0"
-                    className={inputBase}
-                  />
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => ajustarStock(-0.5)}
+                      className="w-9 h-[41px] shrink-0 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-center text-slate-500 hover:bg-slate-100 active:scale-95 transition"
+                      aria-label="Restar media unidad"
+                    >
+                      <Minus size={14} />
+                    </button>
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      value={stockDisponible}
+                      onChange={(e) => {
+                        // Permite dígitos y un único punto decimal mientras tipea
+                        const v = e.target.value.replace(/[^\d.]/g, "");
+                        const partes = v.split(".");
+                        const limpio =
+                          partes.length > 2 ? `${partes[0]}.${partes.slice(1).join("")}` : v;
+                        setStockDisponible(limpio);
+                      }}
+                      onBlur={normalizarStock}
+                      placeholder="0"
+                      className={`${inputBase} text-center font-mono`}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => ajustarStock(0.5)}
+                      className="w-9 h-[41px] shrink-0 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-center text-slate-500 hover:bg-slate-100 active:scale-95 transition"
+                      aria-label="Sumar media unidad"
+                    >
+                      <Plus size={14} />
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-slate-400 mt-1.5">
+                    Solo se admiten fracciones de media unidad (0.5, 1, 1.5, 2...).
+                  </p>
                 </div>
               </div>
 
